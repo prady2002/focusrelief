@@ -1,0 +1,1 @@
+{"blink_reminder_enabled": false, "blink_reminder_interval": 5, "screen_time_reminder_enabled": true, "screen_time_reminder_interval": 20, "distance_reminder_enabled": true, "minimum_distance": 35, "exercise_reminder_enabled": false, "exercise_reminder_interval": 60, "posture_detection_enabled": true}

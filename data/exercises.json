@@ -1,0 +1,50 @@
+{
+    "general": [
+        {
+            "title": "20-20-20 Exercise",
+            "description": "Look at something 20 feet away for 20 seconds.",
+            "steps": [
+                "Look away from your screen",
+                "Focus on an object at least 20 feet away",
+                "Hold your gaze for 20 seconds"
+            ],
+            "duration": 20
+        },
+        {
+            "title": "Eye Rolling",
+            "description": "Roll your eyes in circles to exercise eye muscles.",
+            "steps": [
+                "Look up",
+                "Slowly roll your eyes clockwise",
+                "Complete 5 rotations",
+                "Repeat counter-clockwise"
+            ],
+            "duration": 15
+        }
+    ],
+    "dryness": [
+        {
+            "title": "Blinking Exercise",
+            "description": "Deliberately blink to help moisturize your eyes.",
+            "steps": [
+                "Close your eyes tightly for 2 seconds",
+                "Open and relax for 1 second",
+                "Repeat 10 times"
+            ],
+            "duration": 30
+        }
+    ],
+    "focus": [
+        {
+            "title": "Near-Far Focus",
+            "description": "Switch focus between near and far objects.",
+            "steps": [
+                "Hold your thumb about 10 inches from your face",
+                "Focus on it for 5 seconds",
+                "Look at something 20 feet away for 5 seconds",
+                "Repeat 5 times"
+            ],
+            "duration": 60
+        }
+    ]
+}
