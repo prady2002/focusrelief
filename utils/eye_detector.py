@@ -71,9 +71,7 @@ class EyeDetector:
             cv2.drawContours(frame, [rightEyeHull], -1, (0, 255, 0), 1)
             
             # Display EAR on frame
-            cv2.putText(frame, f"EAR: {ear:.2f}", (10, 50), 
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-            
+           
             # Determine if eyes are open
             eyes_open = ear > self.EAR_THRESHOLD
             eyes_detected = True
@@ -82,3 +80,17 @@ class EyeDetector:
             cv2.rectangle(frame, (rect.left(), rect.top()), (rect.right(), rect.bottom()), (0, 255, 0), 2)
         
         return frame, eyes_open, eyes_detected
+
+    def get_ear(self):
+        """
+        Calculate and return the current Eye Aspect Ratio (EAR)
+        """
+        if self.eye_landmarks is None:
+            return 0.0
+            
+        leftEye, rightEye = self.eye_landmarks
+        leftEAR = self.eye_aspect_ratio(leftEye)
+        rightEAR = self.eye_aspect_ratio(rightEye)
+        
+        # Average the EAR of both eyes
+        return (leftEAR + rightEAR) / 2.0

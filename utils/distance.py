@@ -10,7 +10,7 @@ class DistanceCalculator:
         
         # For calibration
         self.calibrated = False
-        self.calibration_distance = 50  # cm - typical distance user might be from screen
+        self.calibration_distance = 60  # cm - typical distance user might be from screen
 
     def calibrate(self, pixel_width):
         """

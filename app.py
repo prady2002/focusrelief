@@ -66,6 +66,8 @@ def generate_frames():
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     
     start_time = time.time()
+    blink_count = 0  # Initialize blink counter
+    last_eyes_state = True  # Track previous eye state
     
     while True:
         success, frame = cap.read()
@@ -78,24 +80,40 @@ def generate_frames():
         # Process frame for eye detection
         frame, eyes_open, eyes_detected = eye_detector.process_frame(frame)
         
-        # Calculate distance if eyes are detected
-        distance = None
+        # Update blink count when eyes transition from open to closed
         if eyes_detected:
-            distance = distance_calculator.calculate(frame, eye_detector.eye_landmarks)
-            
-            # Display distance on frame
-            if distance:
-                cv2.putText(frame, f"Distance: {distance:.1f} cm", (10, 70), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-                
-                # Check if distance is too close
-                if settings["distance_reminder_enabled"] and distance < settings["min_distance"]:
-                    notification_manager.notify(
-                        "Distance Alert", 
-                        f"You're too close to the screen! Maintain at least {settings['min_distance']} cm distance.",
-                        "distance"
-                    )
+            if last_eyes_state and not eyes_open:
+                blink_count += 1
+            last_eyes_state = eyes_open
         
+        # Display stats on frame
+        # Screen Time
+        cv2.putText(frame, f"Screen Time: {int(screen_time//60)}m {int(screen_time%60)}s", 
+                    (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        
+        # Blink Count
+        cv2.putText(frame, f"Blinks: {blink_count}", 
+                    (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        
+        # Distance if detected
+        if eyes_detected and (distance := distance_calculator.calculate(frame, eye_detector.eye_landmarks)):
+            cv2.putText(frame, f"Distance: {distance:.1f} cm", 
+                        (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            
+            # Check if distance is too close
+            if settings["distance_reminder_enabled"] and distance < settings["min_distance"]:
+                notification_manager.notify(
+                    "Distance Alert", 
+                    f"You're too close to the screen! Maintain at least {settings['min_distance']} cm distance.",
+                    "distance"
+                )
+        
+        # EAR (Eye Aspect Ratio)
+        if eyes_detected:
+            ear = eye_detector.get_ear()  # Add this method to EyeDetector class
+            cv2.putText(frame, f"EAR: {ear:.2f}", 
+                        (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
         # Handle blink detection
         current_time = time.time()
         
@@ -136,10 +154,6 @@ def generate_frames():
                 )
                 with lock:
                     custom_break_end_time = None
-        
-        # Display screen time on frame
-        cv2.putText(frame, f"Screen Time: {int(screen_time//60)}m {int(screen_time%60)}s", 
-                    (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
         
         start_time = current_time
         
